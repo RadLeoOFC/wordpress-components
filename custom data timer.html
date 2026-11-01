@@ -1,0 +1,354 @@
+<div class="radleo-countdown" id="radleo-custom-data-timer">
+
+  <!-- Header and language switcher -->
+  <div class="radleo-countdown__top">
+    <span class="radleo-countdown__tag">
+      RADLEO · COUNTDOWN
+    </span>
+
+    <div class="radleo-countdown__languages" role="group" aria-label="Language / Язык">
+      <button type="button" data-lang="ru" aria-pressed="true">
+        RU
+      </button>
+      <button type="button" data-lang="en" aria-pressed="false">
+        EN
+      </button>
+    </div>
+  </div>
+
+  <!-- Title and description -->
+  <h3 data-i18n="title">
+    До Рождества осталось
+  </h3>
+
+  <!-- Countdown -->
+  <div class="radleo-countdown__grid" role="timer" aria-label="Обратный отсчёт">
+
+    <div class="radleo-countdown__unit">
+      <strong data-unit="days">00</strong>
+      <span data-i18n="days">Дни</span>
+    </div>
+
+    <div class="radleo-countdown__unit">
+      <strong data-unit="hours">00</strong>
+      <span data-i18n="hours">Часы</span>
+    </div>
+
+    <div class="radleo-countdown__unit">
+      <strong data-unit="minutes">00</strong>
+      <span data-i18n="minutes">Минуты</span>
+    </div>
+
+    <div class="radleo-countdown__unit">
+      <strong data-unit="seconds">00</strong>
+      <span data-i18n="seconds">Секунды</span>
+    </div>
+
+  </div>
+
+  <div class="radleo-input-event" style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+    <label>Input event</label>
+    <input type="text" id="radleo-input-event-title" placeholder="Enter event name">
+
+    <label>Input date</label>
+    <input type="date" id="radleo-input-date" placeholder="Enter event date">
+  </div>
+
+  <div class="radleo-input-save" id="radleo-input-save">
+    <button type="button" id="radleo-save-button">Save</button>
+  </div>
+
+  <p class="radleo-countdown__footer" data-countdown-message="" aria-live="off"></p>
+
+</div>
+
+<style>
+.radleo-countdown {
+  box-sizing: border-box;
+  width: 100%;
+  padding: clamp(24px, 5vw, 48px);
+  border-radius: 20px;
+  background: #0B2D5B;
+  color: #ffffff;
+  font-family: inherit;
+}
+
+.radleo-countdown *,
+.radleo-countdown *::before,
+.radleo-countdown *::after {
+  box-sizing: border-box;
+}
+
+.radleo-countdown__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.radleo-countdown__tag {
+  color: #D4A373;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.radleo-countdown__languages {
+  display: flex;
+  padding: 3px;
+  gap: 3px;
+  border-radius: 8px;
+  background: #193C67;
+}
+
+.radleo-countdown__languages button {
+  appearance: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 7px 12px;
+  background: transparent;
+  color: #CCD9E8;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.radleo-countdown__languages button[aria-pressed="true"] {
+  background: #ffffff;
+  color: #0B2D5B;
+}
+
+.radleo-countdown__languages button:focus-visible {
+  outline: 2px solid #D4A373;
+  outline-offset: 3px;
+}
+
+.radleo-countdown h3 {
+  margin: 28px 0 8px;
+  color: #ffffff;
+  font-size: clamp(24px, 4vw, 38px);
+  line-height: 1.2;
+}
+
+.radleo-countdown__subtitle {
+  margin: 0 0 30px;
+  color: #CCD9E8;
+  font-size: 16px;
+}
+
+.radleo-countdown__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.radleo-countdown__unit {
+  min-width: 0;
+  padding: 22px 6px;
+  border-radius: 12px;
+  background: #193C67;
+  text-align: center;
+}
+
+.radleo-countdown__unit strong {
+  display: block;
+  color: #ffffff;
+  font-size: clamp(22px, 4vw, 44px);
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.radleo-countdown__unit span {
+  display: block;
+  margin-top: 10px;
+  color: #CCD9E8;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.radleo-countdown__footer {
+  margin: 24px 0 0;
+  color: #CCD9E8;
+  font-size: 13px;
+}
+
+@media (max-width: 480px) {
+  .radleo-countdown__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .radleo-countdown__unit {
+    padding: 18px 6px;
+  }
+}
+</style>
+
+<script type="module">
+(function () {
+  'use strict';
+
+  const widget = document.getElementById('radleo-custom-data-timer');
+
+  if (!widget || widget.dataset.initialized === 'true') return;
+  widget.dataset.initialized = 'true';
+
+  const translations = {
+    ru: {
+      title: 'До Рождества осталось',
+      subtitle: 'Рождество — новые возможности!',
+      days: 'Дни',
+      hours: 'Часы',
+      minutes: 'Минуты',
+      seconds: 'Секунды',
+      message: year => `До 25 декабря ${year} года`,
+      timerLabel: 'Обратный отсчёт'
+    },
+    en: {
+      title: 'Countdown to Christmas',
+      subtitle: 'A new year. New opportunities!',
+      days: 'Days',
+      hours: 'Hours',
+      minutes: 'Minutes',
+      seconds: 'Seconds',
+      message: year => `Until December 25, ${year}`,
+      timerLabel: 'Christmas countdown'
+    }
+  };
+
+  let currentLang = 'ru';
+
+  try {
+    const saved = localStorage.getItem('radleo-countdown-lang');
+    if (saved === 'ru' || saved === 'en') {
+      currentLang = saved;
+    }
+  } catch (error) {
+    // The widget still works if storage is unavailable.
+  }
+
+  const fields = {
+    days: widget.querySelector('[data-unit="days"]'),
+    hours: widget.querySelector('[data-unit="hours"]'),
+    minutes: widget.querySelector('[data-unit="minutes"]'),
+    seconds: widget.querySelector('[data-unit="seconds"]')
+  };
+
+  const message = widget.querySelector(
+    '[data-countdown-message]'
+  );
+
+  const timer = widget.querySelector('[role="timer"]');
+  const languageButtons = widget.querySelectorAll('[data-lang]');
+
+  const eventTitleInput = document.getElementById('radleo-input-event-title');
+  const eventDateInput = document.getElementById('radleo-input-date');
+
+  const saveButton = document.getElementById('radleo-save-button');
+
+  function saveEventData() {
+    const eventTitle = eventTitleInput.value.trim();
+    const eventDate = eventDateInput.value;
+
+    if (eventTitle && eventDate) {
+      localStorage.setItem('input-event-title', eventTitle);
+      localStorage.setItem('input-date', eventDate);
+      updateCountdown();
+    }
+
+    console.log('Event data saved:', { eventTitle, eventDate });
+
+    
+  };
+
+  saveButton.addEventListener('click', saveEventData);
+
+  function loadEventData() {
+    eventTitleInput.value = localStorage.getItem('input-event-title') || '';
+    eventDateInput.value = localStorage.getItem('input-date') || '';
+
+    console.log('Event data loaded:', { savedTitle: eventTitleInput.value, savedDate: eventDateInput.value });
+  }
+
+  loadEventData();
+
+  function updateCountdown() {
+    const now = new Date();
+    const nextEvent = now.getFullYear();
+
+    // Local midnight on January 1 of the following year.
+    const target = new Date(nextEvent, 11, 25);
+
+    const difference = Math.max(
+      0,
+      target.getTime() - now.getTime()
+    );
+
+    const days = Math.floor(difference / 86400000);
+    const hours = Math.floor(
+      (difference % 86400000) / 3600000
+    );
+    const minutes = Math.floor(
+      (difference % 3600000) / 60000
+    );
+    const seconds = Math.floor(
+      (difference % 60000) / 1000
+    );
+
+    fields.days.textContent = String(days).padStart(2, '0');
+    fields.hours.textContent = String(hours).padStart(2, '0');
+    fields.minutes.textContent = String(minutes).padStart(2, '0');
+    fields.seconds.textContent = String(seconds).padStart(2, '0');
+
+    message.textContent =
+      translations[currentLang].message(nextEvent);
+  }
+
+  function setLanguage(lang) {
+    if (!translations[lang]) return;
+
+    currentLang = lang;
+    const dictionary = translations[lang];
+
+    widget.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.dataset.i18n;
+      if (typeof dictionary[key] === 'string') {
+        element.textContent = dictionary[key];
+      }
+    });
+
+    languageButtons.forEach(button => {
+      button.setAttribute(
+        'aria-pressed',
+        String(button.dataset.lang === lang)
+      );
+    });
+
+    timer.setAttribute('aria-label', dictionary.timerLabel);
+    widget.setAttribute('lang', lang);
+
+    try {
+      localStorage.setItem('radleo-countdown-lang', lang);
+    } catch (error) {
+      // Continue without persistent storage.
+    }
+
+    updateCountdown();
+  }
+
+  languageButtons.forEach(button => {
+    button.addEventListener('click', function () {
+      setLanguage(this.dataset.lang);
+    });
+  });
+
+  setLanguage(currentLang);
+  setInterval(updateCountdown, 1000);
+
+})();
+</script>

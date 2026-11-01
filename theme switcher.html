@@ -1,0 +1,144 @@
+
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Switcher</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+      :root {
+        --color: #9176ff;
+        --dark-color: #000000;
+        --light-color: #f7f7f7;
+        --light-item-color: #ffde59;
+        --dark-item-color: #fff;
+        --label-color: #f0f0f0;
+        --label-dark-color: #4d4d4d;
+        --light-specify-text-color: rgb(11, 45, 91);
+        --dark-specify-text-color: #fff;
+      }
+
+      .switch-label {
+        width: 150px;
+        height: 36px;
+        background: var(--label-color);
+        border-radius: 30px;
+        box-shadow:0 2px 8px rgba(11, 45, 91, 0.10);
+        position: relative;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+      }
+
+      .switch-label-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 5px;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .switch-label-indicator {
+        width: 36px;
+        height: 36px;
+        background: var(--label-dark-color);
+        border-radius: 30px;
+        box-shadow:0 2px 5px rgba(11, 45, 91, 0.18);
+        transition: 0.4s;
+        position: absolute;
+        cursor: pointer;
+        left: 116px;
+        z-index: 1;
+      }
+
+      .icon {
+        width: 28px;
+        height: 28px;
+        color: var(--light-item-color);
+      }
+
+      .icon i {
+        font-size: 24 px;
+      }
+
+      body.darkmode .switch-label-indicator {
+        transform: translateX(-116px);
+        background: var(--label-color);
+      }
+
+      body.darkmode .switch-label {
+        background: var(--label-dark-color);
+      }
+
+      body.darkmode {
+        background: var(--dark-color);
+        color: var(--dark-item-color);
+      }
+
+      body.darkmode .icon {
+        color: var(--dark-item-color);
+      }
+
+      .wp-block-heading {
+        color: var(--light-specify-text-color);
+      }
+
+      body.darkmode .wp-block-heading {
+        color: var(--dark-specify-text-color);
+      }
+
+      .wp-block-button__link.wp-element-button {
+        color: var(--light-specify-text-color);
+      }
+
+      body.darkmode .wp-block-button__link.wp-element-button {
+        color: var(--dark-specify-text-color);
+      }
+    </style>
+  
+  
+    <div class="switch-label">
+      <div class="switch-label-indicator"></div>
+      <div class="switch-label-container">
+        <div class="moon-icon icon" id="moon-icon">
+          <i class="fa-regular fa-moon"></i>
+        </div>
+        <div class="sun-icon icon" id="sun-icon">
+          <i class="fa-solid fa-sun"></i>
+        </div>
+      </div>
+    </div>
+    <script>
+      const body = document.querySelector("body");
+      const switchLabel = document.querySelector(".switch-label");
+
+      function store(value) {
+        localStorage.setItem("darkmode", value);
+      }
+
+      function load() {
+        const darkmode = localStorage.getItem("darkmode");
+        if (!darkmode) {
+          store("false");
+        } else if (darkmode === "true") {
+          body.classList.add("darkmode");
+        }
+      }
+
+      load();
+
+      const Icon = document.querySelectorAll(".icon");
+      switchLabel.addEventListener("click", () => {
+        body.classList.toggle("darkmode");
+        store(body.classList.contains("darkmode"));
+
+        if (body.classList.contains("darkmode")) {
+          localStorage.setItem("theme", "dark");
+        } else {
+          localStorage.setItem("theme", "light");
+        }
+      });
+    </script>
+<!-- /wp:html --></div>
+<!-- /wp:group -->
