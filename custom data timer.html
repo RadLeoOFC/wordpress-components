@@ -47,9 +47,16 @@
   </div>
 
   <div class="radleo-input-event" style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-    <label>Input event</label>
-    <input type="text" id="radleo-input-event-title" placeholder="Enter event name">
-
+    <div class="radleo-input-event-title" id="radleo-input-event-title">
+      <div class="radleo-input-event-title-en-container radleo-input-event-title-container">
+        <label>Input event</label>
+        <input type="text" class="radleo-input-event-title-en radleo-input-event-title-field" id="radleo-input-event-title-en" placeholder="Enter event name on english">
+      </div>
+      <div class="radleo-input-event-title-ru-container radleo-input-event-title-container">
+        <label>Введите событие</label>
+        <input type="text" class="radleo-input-event-title-ru radleo-input-event-title-field" id="radleo-input-event-title-ru" placeholder="Введите событие на русском">
+      </div>
+    </div>
     <label>Input date</label>
     <input type="date" id="radleo-input-date" placeholder="Enter event date">
   </div>
@@ -162,6 +169,24 @@
   font-variant-numeric: tabular-nums;
 }
 
+.radleo-input-event {
+  margin-bottom: 5px;
+}
+
+.radleo-input-event-title {
+  gap: 20px;
+  display: flex;
+}
+
+.radleo-input-event-title-container {
+  display: flex;
+  gap: 5px;
+}
+
+.radleo-input-event-title-field {
+  width: 240px;
+}
+
 .radleo-countdown__unit span {
   display: block;
   margin-top: 10px;
@@ -198,25 +223,29 @@
   if (!widget || widget.dataset.initialized === 'true') return;
   widget.dataset.initialized = 'true';
 
+  const eventTitleENStorage = localStorage.getItem('input-event-title-en');
+  const eventTitleRUStorage = localStorage.getItem('input-event-title-ru');
+  const eventDateStorage = localStorage.getItem('input-date');
+
   const translations = {
     ru: {
-      title: 'До Рождества осталось',
+      title: 'До' + ' ' + eventTitleRUStorage + ' ' + 'осталось',
       subtitle: 'Рождество — новые возможности!',
       days: 'Дни',
       hours: 'Часы',
       minutes: 'Минуты',
       seconds: 'Секунды',
-      message: year => `До 25 декабря ${year} года`,
+      message: year => 'До' + ' ' + eventDateStorage,
       timerLabel: 'Обратный отсчёт'
     },
     en: {
-      title: 'Countdown to Christmas',
+      title: 'Countdown to' + " " + eventTitleENStorage,
       subtitle: 'A new year. New opportunities!',
       days: 'Days',
       hours: 'Hours',
       minutes: 'Minutes',
       seconds: 'Seconds',
-      message: year => `Until December 25, ${year}`,
+      message: year => 'Until' + ' ' + eventDateStorage,
       timerLabel: 'Christmas countdown'
     }
   };
@@ -246,47 +275,41 @@
   const timer = widget.querySelector('[role="timer"]');
   const languageButtons = widget.querySelectorAll('[data-lang]');
 
-  const eventTitleInput = document.getElementById('radleo-input-event-title');
-  const eventDateInput = document.getElementById('radleo-input-date');
-
+  const inputEventTitleEN = document.getElementById('radleo-input-event-title-en');
+  const inputEventTitleRU = document.getElementById('radleo-input-event-title-ru') 
+  const inputDate = document.getElementById('radleo-input-date');
   const saveButton = document.getElementById('radleo-save-button');
 
-  function saveEventData() {
-    const eventTitle = eventTitleInput.value.trim();
-    const eventDate = eventDateInput.value;
+  
 
-    if (eventTitle && eventDate) {
-      localStorage.setItem('input-event-title', eventTitle);
+  function setEvent(){
+    const eventTitleEN = inputEventTitleEN.value.trim();
+    const eventTitleRU = inputEventTitleRU.value.trim();
+    const eventDate = inputDate.value;
+    if (eventTitleEN && eventTitleRU && eventDate) {
+      localStorage.setItem('input-event-title-en', eventTitleEN);
+      localStorage.setItem('input-event-title-ru', eventTitleRU);
       localStorage.setItem('input-date', eventDate);
       updateCountdown();
     }
-
-    console.log('Event data saved:', { eventTitle, eventDate });
-
-    
-  };
-
-  saveButton.addEventListener('click', saveEventData);
-
-  function loadEventData() {
-    eventTitleInput.value = localStorage.getItem('input-event-title') || '';
-    eventDateInput.value = localStorage.getItem('input-date') || '';
-
-    console.log('Event data loaded:', { savedTitle: eventTitleInput.value, savedDate: eventDateInput.value });
+    console.log('Event:', eventTitleEN, eventTitleRU, eventDate);
   }
 
-  loadEventData();
+  saveButton.addEventListener('click', setEvent);
+
+  setEvent();
 
   function updateCountdown() {
+
     const now = new Date();
-    const nextEvent = now.getFullYear();
+    //const nextEvent = now.getFullYear();
 
     // Local midnight on January 1 of the following year.
-    const target = new Date(nextEvent, 11, 25);
+    const nextEvent = new Date(eventDateStorage);
 
     const difference = Math.max(
       0,
-      target.getTime() - now.getTime()
+      nextEvent.getTime() - now.getTime()
     );
 
     const days = Math.floor(difference / 86400000);
